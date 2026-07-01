@@ -5,8 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function rechercherLogements() {
     const ville = document.getElementById('search-ville').value;
-    const url = ville ? `/api/logements?ville=${encodeURIComponent(ville)}` : '/api/logements';
+    const type = document.getElementById('filter-type').value;
+    
+    // Construction dynamique des paramètres de recherche
+    const params = new URLSearchParams();
+    if (ville) params.append('ville', ville);
+    if (type) params.append('type', type);
 
+    const queryString = params.toString();
+    const url = queryString ? `/api/logements?${queryString}` : '/api/logements';
+    
     try {
         const response = await fetch(url);
         const logements = await response.json();
@@ -14,7 +22,7 @@ async function rechercherLogements() {
         listContainer.innerHTML = '';
 
         if (logements.length === 0) {
-            listContainer.innerHTML = '<p>Aucun logement trouvé pour cette destination.</p>';
+            listContainer.innerHTML = '<p>Aucun logement ne correspond à vos critères de recherche.</p>';
             return;
         }
 
@@ -25,6 +33,7 @@ async function rechercherLogements() {
                 <h3>${logement.titre}</h3>
                 <p>${logement.description}</p>
                 <p><strong>Ville :</strong> ${logement.ville}</p>
+                <p><strong>Type :</strong> ${logement.type || 'Non spécifié'}</p>
                 <p class="price">${logement.prix_par_nuit} € / nuit</p>
                 <button onclick="ouvrirModal(${logement.id})">Réserver</button>
             `;
