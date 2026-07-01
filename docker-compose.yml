@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   web:
     image: nginx:alpine
@@ -15,7 +13,7 @@ services:
 
   api:
     build: ./api
-    image: VOTRE_USERNAME/airbnb-api:1.0
+    image: cedricmc11/airbnb-api:1.0
     environment:
       - PORT=3000
       - DB_HOST=db
