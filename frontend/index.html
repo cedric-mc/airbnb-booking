@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airbnb Clone - Réservation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Airbnb Clone</h1>
+        <div class="search-box">
+            <input type="text" id="search-ville" placeholder="Où allez-vous ? (ex: Paris, Marseille...)">
+            <button onclick="rechercherLogements()">Rechercher</button>
+        </div>
+    </header>
+
+    <main>
+        <section id="logements-section">
+            <h2>Logements disponibles</h2>
+            <div id="logements-list" class="grid-container"></div>
+        </section>
+
+        <section id="reservation-section" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-btn" onclick="fermerModal()">&times;</span>
+                <h2>Réserver le logement</h2>
+                <form id="reservation-form" onsubmit="soumettreReservation(event)">
+                    <input type="hidden" id="form-logement-id">
+                    <label>Votre Nom :</label>
+                    <input type="text" id="form-nom" required>
+                    <label>Date de début :</label>
+                    <input type="date" id="form-debut" required>
+                    <label>Date de fin :</label>
+                    <input type="date" id="form-fin" required>
+                    <button type="submit">Confirmer la réservation</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
