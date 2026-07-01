@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - airbnb-net
+    depends_on:
+      - api
+
+  api:
+    build: ./api
+    image: VOTRE_USERNAME/airbnb-api:1.0
+    environment:
+      - PORT=3000
+      - DB_HOST=db
+      - DB_USER=admin
+      - DB_PASSWORD=secret
+      - DB_NAME=airbnb
+    networks:
+      - airbnb-net
+    depends_on:
+      db:
+        condition: service_started
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=airbnb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - airbnb-net
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8081:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=db
+    networks:
+      - airbnb-net
+    depends_on:
+      - db
+
+volumes:
+  db-data:
+
+networks:
+  airbnb-net:
+    driver: bridge
